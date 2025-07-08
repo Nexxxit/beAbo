@@ -1,8 +1,8 @@
-export default function Button({text, onClick, className, disabled}) {
+export default function Button({text, onClick, className, disabled = false}) {
     return (
         <button
             disabled={disabled}
-            className={`shadow bg-[#F6BA00]${disabled && '/32'}  ${className}`}
+            className={`shadow montserrat-semi-bold rounded-2xl py-5 ${disabled ? 'bg-[#F6BA00]/68' : 'bg-[#F6BA00]'}  ${className}`}
             onClick={onClick}
         >
             {text}
