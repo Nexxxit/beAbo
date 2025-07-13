@@ -4,6 +4,8 @@ import MainLayout from "../components/layout/MainLayout.jsx";
 import RootLayout from "../components/layout/RootLayout.jsx";
 import AuthPage from "../pages/AuthPage.jsx";
 import ErrorPage from "../pages/ErrorPage.jsx";
+import RegisterPage from "../pages/RegisterPage.jsx";
+import LoginPage from "../pages/LoginPage.jsx";
 
 const router = createBrowserRouter([
     {
@@ -18,17 +20,26 @@ const router = createBrowserRouter([
         ]
 
     },
-    // {
-    //     path: '/',
-    //     element: <MainLayout />,
-    //     errorElement: <ErrorPage />,
-    //     children: [
-    //         {
-    //             index: true,
-    //             element:
-    //         }
-    //     ]
-    // }
+    {
+        path: 'app',
+        element: <MainLayout />,
+        errorElement: <ErrorPage />,
+        children: [
+            {
+                index: true,
+                element: <Home />,
+            },
+            {
+                path: 'register',
+                element: <RegisterPage />,
+            },
+            {
+                path: 'login',
+                element: <LoginPage />,
+            },
+
+        ]
+    }
 ])
 
 
