@@ -4,7 +4,11 @@ const SurveyContext = createContext();
 
 export function SurveyProvider({ children }) {
     const [surveyState, setSurveyState] = useState({
+        showName: true,
+        showHeader: true,
         showBackButton: false,
+        profileOpen: false,
+        userName: JSON.parse(localStorage.getItem('userName')) || '',
         handleBack: () => {}
     });
 

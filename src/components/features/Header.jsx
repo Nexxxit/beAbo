@@ -1,44 +1,72 @@
-import {Link} from "react-router";
 import {useSurvey} from "../../contexts/SurveyProvider.jsx";
 import backIcon from "../../assets/images/backIcon.png";
+import {useLocation} from "react-router";
+import {useEffect, useState} from "react";
 
 
 export function Header({className}) {
-    const {surveyState} = useSurvey();
+    const {surveyState, setSurveyState} = useSurvey();
+    const location = useLocation();
+    const [isHomePage, setHomePage] = useState(false);
+
+    useEffect(() => {
+        setHomePage(location.pathname === '/app/home');
+    }, [location.pathname])
+
+    // useEffect(() => {
+    //     setSurveyState(prev => ({
+    //         ...prev,
+    //         profileOpen: isOpen,
+    //     }))
+    // }, [isOpen])
+
+    const toggleMenu = () => {
+        setSurveyState((prev) => ({
+            ...prev,
+            profileOpen: !prev.profileOpen,
+        }));
+    };
 
     return (
-        <header className={`flex justify-between items-center p-[17px] ${className}`}>
-            <p className="montserrat-extra-bold text-[40px] text-[#343330]">BeAbo</p>
-            {surveyState.showBackButton && (
-                <button onClick={surveyState.handleBack} className=''>
-                    <img src={backIcon} alt="back" />
-                </button>
+        <>
+            {surveyState.showHeader && (
+                <header className={`flex justify-between items-center p-[17px] ${className}`}>
+                    {surveyState.showName
+                        ? (<p className="montserrat-extra-bold text-[40px] text-[#343330]">BeAbo</p>)
+                        : (<div className={'h-15'}></div>)
+                    }
+
+                    {isHomePage && surveyState.userName && !surveyState.profileOpen && (
+                        <div className={'flex gap-3'}>
+                            <p className={'montserrat-bold text-xl text-[#343330]'}>
+                                {surveyState.userName}
+                            </p>
+                            <button
+                                className="relative w-8 h-[26px] bg-transparent border-none"
+                                data-active={surveyState.profileOpen}
+                                onClick={toggleMenu}
+                            >
+                            <span
+                                className="absolute left-0 top-0 w-full h-1 rounded-full bg-black transition-all duration-300 ease-in-out data-[active=true]:top-[11px] data-[active=true]:rotate-45 data-[active=true]:shadow-none"
+                            ></span>
+                                <span
+                                    className="absolute left-0 top-[11px] w-full h-1 rounded-full bg-black transition-all duration-300 ease-in-out data-[active=true]:opacity-0"
+                                ></span>
+                                <span
+                                    className="absolute left-0 bottom-0 w-full h-1 rounded-full bg-black transition-all duration-300 ease-in-out data-[active=true]:bottom-[11px] data-[active=true]:-rotate-45"
+                                ></span>
+                            </button>
+                        </div>
+                    )}
+
+                    {surveyState.showBackButton && (
+                        <button onClick={surveyState.handleBack} className=''>
+                            <img src={backIcon} alt="back"/>
+                        </button>
+                    )}
+
+                </header>
             )}
-            {/*{currentStep !== 0 && (*/}
-            {/*    <button className='' onClick={handlePrev}>*/}
-
-            {/*    </button>*/}
-            {/*)}*/}
-
-            {/*<nav>*/}
-            {/*    <ul>*/}
-            {/*        <li>*/}
-            {/*            <Link to="/">Мои путешествия</Link>*/}
-            {/*        </li>*/}
-            {/*        <li>*/}
-            {/*            <Link to="/">Настройки профилей</Link>*/}
-            {/*        </li>*/}
-            {/*        <li>*/}
-            {/*            <Link to="/">Настройки аккаунта</Link>*/}
-            {/*        </li>*/}
-            {/*        <li>*/}
-            {/*            <Link to="/">Тарифы</Link>*/}
-            {/*        </li>*/}
-            {/*        <li>*/}
-            {/*            <Link to="/">Выйти</Link>*/}
-            {/*        </li>*/}
-            {/*    </ul>*/}
-            {/*</nav>*/}
-        </header>
+        </>
     )
 }

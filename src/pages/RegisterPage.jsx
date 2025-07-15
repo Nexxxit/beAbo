@@ -22,7 +22,7 @@ import FormField from "../components/commons/FormField.jsx";
 import {useSurvey} from "../contexts/SurveyProvider.jsx";
 import Dropdown from "../components/commons/Dropdown.jsx";
 import DateTimePicker from "../components/features/DateTimePicker.jsx";
-import {Link} from "react-router";
+import {useNavigate} from "react-router";
 
 export default function RegisterPage() {
     const [answers, setAnswers] = useState({
@@ -46,8 +46,12 @@ export default function RegisterPage() {
     const {setSurveyState} = useSurvey();
     const [showDropdown, setShowDropdown] = useState(false);
 
+    const navigate = useNavigate();
+
     useEffect(() => {
         setSurveyState({
+            showName: questions[currentStep].id !== 'q9',
+            showHeader: true,
             showBackButton: currentStep > 0,
             handleBack: handleBack
         });
@@ -273,6 +277,18 @@ export default function RegisterPage() {
         }))
     }
 
+    const handleSubmit = () => {
+        const name = answers['q1'];
+        localStorage.setItem('userName', JSON.stringify(name));
+
+        setSurveyState(prev => ({
+            ...prev,
+            userName: JSON.parse(localStorage.getItem('userName')) || '',
+        }));
+
+        navigate('/app/home');
+    }
+
     return (
         <div className='flex flex-col h-150 justify-between'>
             <div className='flex flex-col items-center justify-between gap-15 px-2 '>
@@ -454,18 +470,12 @@ export default function RegisterPage() {
             </div>
 
             <div className='mx-auto'>
-                {currentStep === questions.length - 1
-                    ? (
-                        <Link className={`shadow montserrat-semi-bold rounded-2xl py-3 text-xl ${!isQuestionComplete(currentQuestion) ? 'bg-[#F6BA00]/68' : 'bg-[#F6BA00]'}`} to='/'>Отправить</Link>
-                    )
-                    : (
-                        <Button
-                            className={'px-9'}
-                            text={'Далее'}
-                            onClick={handleNext}
-                            disabled={!isQuestionComplete(currentQuestion)}
-                        />
-                    )}
+                <Button
+                    className={'px-9'}
+                    text={currentStep === questions.length - 1 ? 'Отправить' : 'Далее'}
+                    onClick={currentStep === questions.length - 1 ? handleSubmit : handleNext}
+                    disabled={!isQuestionComplete(currentQuestion)}
+                />
             </div>
 
         </div>
