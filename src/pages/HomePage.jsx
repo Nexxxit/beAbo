@@ -17,18 +17,31 @@ import viborgIcon from '../assets/images/homeImage/viborgIcon.png';
 
 
 import profileAvatarIcon from '../assets/images/profileAvatar.svg';
+import {useNavigate} from "react-router";
 
 export default function HomePage() {
     const {setSurveyState, surveyState} = useSurvey()
     const [currentSection, setCurrentSection] = useState('main')
+    const navigate = useNavigate();
+
+    // useEffect(() => {
+    //     setSurveyState({
+    //         showHeader: true,
+    //         showName: true,
+    //         userName: surveyState.userName,
+    //     })
+    // }, [])
 
     useEffect(() => {
-        setSurveyState({
+        const storedUserName = JSON.parse(localStorage.getItem('userNames')) || '';
+        setSurveyState(prev => ({
+            ...prev,
             showHeader: true,
             showName: true,
-            userName: surveyState.userName,
-        })
-    }, [])
+            userName: storedUserName || prev.userName,
+            profileOpen: false,
+        }));
+    }, []);
 
     useEffect(() => {
         if (surveyState.profileOpen) {
@@ -139,7 +152,11 @@ export default function HomePage() {
                 <div className={'size-20 p-5 bg-white rounded-full'}>
                     <img src={profileAvatarIcon} alt={'Your Picture'}/>
                 </div>
-                <p className={'montserrat-bold text-xl'}>{surveyState.userName}</p>
+                <p className={'montserrat-bold text-xl'}>{
+                    surveyState.userName && surveyState.userName.length > 1
+                        ? surveyState.userName[surveyState.userName.length - 1]
+                        : surveyState.userName
+                }</p>
             </div>
             <div>
                 {currentSection === 'main' ? (
@@ -215,12 +232,14 @@ export default function HomePage() {
                         <div className={'flex-grow'}>
                             <div className={'flex flex-col items-center gap-6 w-full max-w-md mx-auto'}>
                                 <button
+                                    onClick={() => navigate('/app/createTravel')}
                                     className={'relative items-center justify-end bg-[#E1E1E1] rounded-2xl flex flex-col p-3 w-52 h-53 shadow-md/30 text-center montserrat-bold text-[#343330] text-[15px]'}>
                                     <img className={'absolute w-32 h-40 -top-1'} src={createNewTravelIcon}
                                          alt={'Создать новое путешествие'}/>
                                     <p>Создать новое путешествие</p>
                                 </button>
                                 <button
+                                    onClick={() => navigate('/app/myTravels')}
                                     className={'relative items-center justify-end bg-[#E1E1E1] rounded-2xl flex flex-col p-3 w-52 h-53 shadow-md/30 text-center montserrat-bold text-[#343330] text-[15px]'}>
                                     <img className={'absolute w-full'} src={myTravelsIcon} alt={'Мои путешествия'}/>
                                     <p>Мои путешествия</p>

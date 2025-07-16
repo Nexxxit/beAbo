@@ -13,13 +13,6 @@ export function Header({className}) {
         setHomePage(location.pathname === '/app/home');
     }, [location.pathname])
 
-    // useEffect(() => {
-    //     setSurveyState(prev => ({
-    //         ...prev,
-    //         profileOpen: isOpen,
-    //     }))
-    // }, [isOpen])
-
     const toggleMenu = () => {
         setSurveyState((prev) => ({
             ...prev,
@@ -39,7 +32,11 @@ export function Header({className}) {
                     {isHomePage && surveyState.userName && !surveyState.profileOpen && (
                         <div className={'flex gap-3'}>
                             <p className={'montserrat-bold text-xl text-[#343330]'}>
-                                {surveyState.userName}
+                                {
+                                    surveyState.userName && surveyState.userName.length > 0
+                                        ?  surveyState.userName[surveyState.userName.length - 1]
+                                        :  surveyState.userName
+                                }
                             </p>
                             <button
                                 className="relative w-8 h-[26px] bg-transparent border-none"

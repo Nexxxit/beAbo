@@ -8,7 +8,7 @@ export function SurveyProvider({ children }) {
         showHeader: true,
         showBackButton: false,
         profileOpen: false,
-        userName: JSON.parse(localStorage.getItem('userName')) || '',
+        userName: JSON.parse(localStorage.getItem('userNames')) || '',
         handleBack: () => {}
     });
 

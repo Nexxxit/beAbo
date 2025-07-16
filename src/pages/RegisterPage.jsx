@@ -22,10 +22,24 @@ import FormField from "../components/commons/FormField.jsx";
 import {useSurvey} from "../contexts/SurveyProvider.jsx";
 import Dropdown from "../components/commons/Dropdown.jsx";
 import DateTimePicker from "../components/features/DateTimePicker.jsx";
-import {useNavigate} from "react-router";
+import {useLocation, useNavigate} from "react-router";
 
 export default function RegisterPage() {
+    const location = useLocation();
+    const initialStep = location.state && location.state.startFrom === 'q2'
+        ? 1
+        : location.state && location.state.startFrom === 'q7'
+            ? 6
+            : 0;
+    const currentName = location.state?.currentName || null;
+    const [currentStep, setCurrentStep] = useState(initialStep);
+    const [error, setError] = useState();
+    const [lastQuestionId, setLastQuestionId] = useState(null);
+    const [history, setHistory] = useState([]);
+    const {setSurveyState} = useSurvey();
+    const [showDropdown, setShowDropdown] = useState(false);
     const [answers, setAnswers] = useState({
+        q1: currentName || '',
         q7: {
             date: null, location: null,
         },
@@ -39,12 +53,7 @@ export default function RegisterPage() {
             otherRestriction: '',
         }
     });
-    const [currentStep, setCurrentStep] = useState(0);
-    const [error, setError] = useState();
-    const [lastQuestionId, setLastQuestionId] = useState(null);
-    const [history, setHistory] = useState([]);
-    const {setSurveyState} = useSurvey();
-    const [showDropdown, setShowDropdown] = useState(false);
+
 
     const navigate = useNavigate();
 
@@ -223,7 +232,16 @@ export default function RegisterPage() {
         setError("");
         setLastQuestionId(currentQuestion.id);
         setHistory(prev => [...prev, currentStep]);
-        setCurrentStep(prev => Math.min(prev + 1, questions.length - 1));
+
+        if (location.state?.startFrom === 'q7') {
+            setSurveyState(prev => ({
+                ...prev,
+                answers: {...prev.answers, ...answers}
+            }));
+            navigate('/app/customPage')
+        } else {
+            setCurrentStep(prev => Math.min(prev + 1, questions.length - 1));
+        }
 
     }
 
@@ -279,18 +297,23 @@ export default function RegisterPage() {
 
     const handleSubmit = () => {
         const name = answers['q1'];
-        localStorage.setItem('userName', JSON.stringify(name));
-
-        setSurveyState(prev => ({
-            ...prev,
-            userName: JSON.parse(localStorage.getItem('userName')) || '',
-        }));
+        if (name && !location.state?.currentName) {
+            let names = JSON.parse(localStorage.getItem('userNames')) || [];
+            if (!names.includes(name)) {
+                names.push(name);
+                localStorage.setItem('userNames', JSON.stringify(names));
+                setSurveyState(prev => ({
+                    ...prev,
+                    userNames: names,
+                }));
+            }
+        }
 
         navigate('/app/home');
     }
 
     return (
-        <div className='flex flex-col h-150 justify-between'>
+        <div className='flex flex-col h-150 justify-between w-full'>
             <div className='flex flex-col items-center justify-between gap-15 px-2 '>
                 {currentQuestion.id !== 'q9' && (
                     <p className='montserrat-extra-bold text-center text-2xl text-[#343330]'>{currentQuestion.text}</p>
