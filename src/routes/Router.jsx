@@ -8,6 +8,7 @@ import RegisterPage from "../pages/RegisterPage.jsx";
 import LoginPage from "../pages/LoginPage.jsx";
 import HomePage from "../pages/HomePage.jsx";
 import CreateTravelPage from "../pages/CreateTravelPage.jsx";
+import MyTravelsPage from "../pages/MyTravelsPage.jsx";
 
 const router = createBrowserRouter([
     {
@@ -43,9 +44,13 @@ const router = createBrowserRouter([
                 path: 'createTravel',
                 element: <CreateTravelPage />,
             },
+            {
+                path: 'myTravels',
+                element: <MyTravelsPage />,
+            },
             // {
-            //     path: 'myTravels',
-            //     element: <MyTravelsPage />,
+            //     path: 'priceList',
+            //     element: <PriceListPage />,
             // },
 
         ]
