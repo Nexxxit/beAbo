@@ -26,7 +26,7 @@ export default function MyTravelsPage() {
             completed: true,
         },
         {
-            travelName: 'Питергоф',
+            travelName: 'Петергоф',
             imgSrc: petergofIcon,
             completed: false,
         },

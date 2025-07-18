@@ -10,11 +10,11 @@ export default function AuthPage() {
             </div>
             <div className='flex flex-col gap-11 p-10 w-90'>
                 <div className='flex flex-col gap-6'>
-                    <p className='montserrat-semi-bold text-[#693131] text-xl text-center bg-white/20 p-1'>Получите своё персонализированное готовое путешествие самостоятельно!</p>
+                    <p className='montserrat-semi-bold text-xl text-center bg-white/20 p-1'>Получите своё персонализированное готовое путешествие самостоятельно!</p>
                     <Link className='shadow montserrat-semi-bold rounded-2xl py-3 text-xl text-center bg-[#F6BA00]' to={'app/register'} >Начать</Link>
                 </div>
                 <div className='flex flex-col gap-6'>
-                    <p className='montserrat-semi-bold text-[#693131] text-[15px] text-center bg-white/20 p-1'>Если вы уже пользователь сервиса, войдите в свой аккаунт</p>
+                    <p className='montserrat-semi-bold text-[15px] text-center bg-white/20 p-1'>Если вы уже пользователь сервиса, войдите в свой аккаунт</p>
                     <Link className='shadow montserrat-semi-bold rounded-2xl py-3 text-xl text-center bg-[#F6BA00]' to={'app/login'} >Войти</Link>
                 </div>
             </div>
