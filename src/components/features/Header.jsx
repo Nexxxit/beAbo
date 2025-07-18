@@ -27,7 +27,7 @@ export function Header({className}) {
                 <header className={`flex justify-between items-center p-[17px] ${className}`}>
                     {surveyState.showName
                         ? (<p
-                            onClick={() => navigate('/app/home')}
+                            onClick={location.pathname !== '/app/register' && (() => navigate('/app/home'))}
                             className="cursor-pointer montserrat-extra-bold text-[40px] text-[#343330]">BeAbo</p>)
                         : (<div className={'h-15'}></div>)
                     }
