@@ -1,12 +1,13 @@
 import {useSurvey} from "../../contexts/SurveyProvider.jsx";
 import backIcon from "../../assets/images/backIcon.png";
-import {useLocation} from "react-router";
+import {useLocation, useNavigate} from "react-router";
 import {useEffect, useState} from "react";
 
 
 export function Header({className}) {
     const {surveyState, setSurveyState} = useSurvey();
     const location = useLocation();
+    const navigate = useNavigate();
     const [isHomePage, setHomePage] = useState(false);
 
     useEffect(() => {
@@ -25,7 +26,9 @@ export function Header({className}) {
             {surveyState.showHeader && (
                 <header className={`flex justify-between items-center p-[17px] ${className}`}>
                     {surveyState.showName
-                        ? (<p className="montserrat-extra-bold text-[40px] text-[#343330]">BeAbo</p>)
+                        ? (<p
+                            onClick={() => navigate('/app/home')}
+                            className="cursor-pointer montserrat-extra-bold text-[40px] text-[#343330]">BeAbo</p>)
                         : (<div className={'h-15'}></div>)
                     }
 

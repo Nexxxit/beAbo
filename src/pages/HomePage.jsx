@@ -226,17 +226,17 @@ export default function HomePage() {
                     <div className={'flex flex-col w-full'}>
 
                         <div className={'flex-grow'}>
-                            <div className={'flex flex-col items-center gap-6 w-full max-w-md mx-auto'}>
+                            <div className={'flex flex-col items-center gap-6 w-full max-w-sm md:max-h-180 md:h-full mx-auto'}>
                                 <button
                                     onClick={() => navigate('/app/chooseTravelProfile')}
-                                    className={'relative items-center justify-end bg-[#E1E1E1] rounded-2xl flex flex-col p-3 w-52 h-53 shadow-md/30 text-center montserrat-bold text-[#343330] text-[15px]'}>
-                                    <img className={'absolute w-32 h-40 -top-1'} src={createNewTravelIcon}
+                                    className={'relative items-center justify-end md:justify-between bg-[#E1E1E1] rounded-2xl flex flex-col p-3 w-52 h-53 md:flex-1 md:w-full shadow-md/30 text-center montserrat-bold text-[#343330] text-[15px]'}>
+                                    <img className={'absolute w-32 h-40 -top-1 md:relative md:my-auto'} src={createNewTravelIcon}
                                          alt={'Создать новое путешествие'}/>
                                     <p>Создать новое путешествие</p>
                                 </button>
                                 <button
                                     onClick={() => navigate('/app/myTravels')}
-                                    className={'relative items-center justify-end bg-[#E1E1E1] rounded-2xl flex flex-col p-3 w-52 h-53 shadow-md/30 text-center montserrat-bold text-[#343330] text-[15px]'}>
+                                    className={'relative items-center justify-end bg-[#E1E1E1] rounded-2xl flex flex-col p-3 w-52 h-53 md:flex-1 md:w-full shadow-md/30 text-center montserrat-bold text-[#343330] text-[15px]'}>
                                     <img className={'absolute w-full'} src={myTravelsIcon} alt={'Мои путешествия'}/>
                                     <p>Мои путешествия</p>
                                 </button>
