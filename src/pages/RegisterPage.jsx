@@ -31,11 +31,18 @@ export default function RegisterPage() {
         : location.state && location.state.startFrom === 'q7'
             ? 6
             : 0;
+
+    const [history, setHistory] = useState(() => {
+        if (initialStep > 0) {
+            return Array.from({ length: initialStep }, (_, i) => i);
+        }
+        return [];
+    });
+
     const currentName = location.state?.currentName || null;
     const [currentStep, setCurrentStep] = useState(initialStep);
     const [error, setError] = useState();
     const [lastQuestionId, setLastQuestionId] = useState(null);
-    const [history, setHistory] = useState([]);
     const {setSurveyState} = useSurvey();
     const [showDropdown, setShowDropdown] = useState(false);
     const [showDatePicker, setShowDatePicker] = useState(false);
@@ -76,10 +83,13 @@ export default function RegisterPage() {
     useEffect(() => {
         questions.forEach((question) => {
             if (question.type === 'scaleSelect' && !answers[question.id]) {
-                handleChange(question.id, '0');
+                setAnswers(prev => ({
+                    ...prev,
+                    [question.id]: '0'
+                }));
             }
-        })
-    }, [])
+        });
+    }, []);
 
     const countries = [
         {
@@ -244,7 +254,15 @@ export default function RegisterPage() {
         }
         setError("");
         setLastQuestionId(currentQuestion.id);
-        setHistory(prev => [...prev, currentStep]);
+
+        // setHistory(prev => [...prev, currentStep]);
+
+        setHistory(prev => {
+            if (prev[prev.length - 1] !== currentStep) {
+                return [...prev, currentStep];
+            }
+            return prev;
+        });
 
         if (location.state?.startFrom === 'q7') {
             setSurveyState(prev => ({
@@ -260,8 +278,8 @@ export default function RegisterPage() {
 
     const handleBack = () => {
         setError('');
-        if (history.length > 1) {
-            const prevStep = history[history.length - 2];
+        if (history.length > 0) {
+            const prevStep = history[history.length - 1];
             setHistory(prev => prev.slice(0, -1));
             setCurrentStep(prevStep);
         } else {
@@ -490,20 +508,20 @@ export default function RegisterPage() {
                 )}
 
                 {currentQuestion.type === 'scaleSelect' && (
-                    <div className='flex flex-col bg-[#E1E1E1] px-5 py-3 rounded-xl'>
+                    <div className='flex flex-col bg-[#E1E1E1] px-5 py-3 rounded-xl max-w-lg w-full h-full'>
                         <div className='flex gap-5 pb-2 text-center items-center'>
                             <div
                                 className='text-[#343330] montserrat-semi-bold text-[16px] flex-1'>{currentQuestion.option1}</div>
                             <div
                                 className='text-[#343330] montserrat-semi-bold text-[16px] flex-1'>{currentQuestion.option2}</div>
                         </div>
-                        <div className='flex gap-5 pb-7 justify-between'>
+                        <div className='flex gap-5 pb-7 justify-between max-h-70 h-full'>
                             <div className={'flex-1'}>
-                                <img className={'h-50 w-full'} src={currentQuestion.image1}
+                                <img className={'h-full w-full'} src={currentQuestion.image1}
                                      alt={currentQuestion.option1}/>
                             </div>
                             <div className={'flex-1'}>
-                                <img className={'h-50 w-full'} src={currentQuestion.image2}
+                                <img className={'h-full w-full'} src={currentQuestion.image2}
                                      alt={currentQuestion.option1}/>
                             </div>
                         </div>
