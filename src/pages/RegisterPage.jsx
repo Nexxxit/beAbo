@@ -516,16 +516,18 @@ export default function RegisterPage() {
                     <div className={'flex flex-col items-center justify-center w-full'}>
                         <img className={'max-w-70 w-full'} src={beAboLogo} alt={'beAbo Logo'}/>
                         <p className={'text-center my-10 montserrat text-xl'}>{currentQuestion.description}</p>
-                        <div className={'flex flex-col pb-2 w-full'}>
-                            <label className={'px-2 montserrat-semi-bold text-[16px] text-[#343330]'}
-                                   htmlFor={'email'}>Email</label>
-                            <input
-                                type={'email'}
-                                value={answers[currentQuestion.id] || ''}
-                                className={'p-3 rounded-2xl montserrat text-xl bg-[#CBCACA] max-w-80 w-full'}
-                                id={'email'}
-                                onChange={(e) => handleChange('q9', e.target.value)}
-                            />
+                        <div className={'flex flex-col items-center pb-2 w-full'}>
+                            <div>
+                                <label className={'px-2 montserrat-semi-bold text-[16px] text-[#343330]'}
+                                       htmlFor={'email'}>Email</label>
+                                <input
+                                    type={'email'}
+                                    value={answers[currentQuestion.id] || ''}
+                                    className={'p-3 rounded-2xl montserrat text-xl bg-[#CBCACA] max-w-80 w-full'}
+                                    id={'email'}
+                                    onChange={(e) => handleChange('q9', e.target.value)}
+                                />
+                            </div>
                         </div>
                         <div className={'flex flex-col items-center gap-6'}>
                             <p className={'text-center montserrat text-[15px] w-60'}>Пароль от ЛК также придет на
