@@ -7,8 +7,10 @@ import ErrorPage from "../pages/ErrorPage.jsx";
 import RegisterPage from "../pages/RegisterPage.jsx";
 import LoginPage from "../pages/LoginPage.jsx";
 import HomePage from "../pages/HomePage.jsx";
-import CreateTravelPage from "../pages/CreateTravelPage.jsx";
+import ChooseTravelProfilePage from "../pages/ChooseTravelProfilePage.jsx";
 import MyTravelsPage from "../pages/MyTravelsPage.jsx";
+import PriceListPage from "../pages/PriceListPage.jsx";
+import CreateTravelPage from "../pages/CreateTravelPage.jsx";
 
 const router = createBrowserRouter([
     {
@@ -41,17 +43,21 @@ const router = createBrowserRouter([
                 element: <LoginPage />,
             },
             {
-                path: 'createTravel',
-                element: <CreateTravelPage />,
+                path: 'chooseTravelProfile',
+                element: <ChooseTravelProfilePage />,
             },
             {
                 path: 'myTravels',
                 element: <MyTravelsPage />,
             },
-            // {
-            //     path: 'priceList',
-            //     element: <PriceListPage />,
-            // },
+            {
+                path: 'priceList',
+                element: <PriceListPage />,
+            },
+            {
+                path: 'createTravel',
+                element: <CreateTravelPage />,
+            },
 
         ]
     }

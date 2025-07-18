@@ -38,6 +38,7 @@ export default function RegisterPage() {
     const [history, setHistory] = useState([]);
     const {setSurveyState} = useSurvey();
     const [showDropdown, setShowDropdown] = useState(false);
+    const [showDatePicker, setShowDatePicker] = useState(false);
     const [answers, setAnswers] = useState({
         q1: currentName || '',
         q7: {
@@ -54,6 +55,12 @@ export default function RegisterPage() {
         }
     });
 
+    useEffect(() => {
+        if (currentName) {
+            const storedAnswers = JSON.parse(localStorage.getItem(currentName)) || {};
+            setAnswers(prev => ({...prev, ...storedAnswers}));
+        }
+    }, [currentName]);
 
     const navigate = useNavigate();
 
@@ -220,8 +227,14 @@ export default function RegisterPage() {
     }
 
     const handleShowDropdown = () => {
-        setShowDropdown(!showDropdown);
-    }
+        setShowDropdown(true);
+        setShowDatePicker(false);
+    };
+
+    const handleShowDatePicker = () => {
+        setShowDatePicker(true);
+        setShowDropdown(false);
+    };
 
     const handleNext = () => {
 
@@ -238,7 +251,7 @@ export default function RegisterPage() {
                 ...prev,
                 answers: {...prev.answers, ...answers}
             }));
-            navigate('/app/customPage')
+            navigate('/app/createTravel')
         } else {
             setCurrentStep(prev => Math.min(prev + 1, questions.length - 1));
         }
@@ -247,12 +260,14 @@ export default function RegisterPage() {
 
     const handleBack = () => {
         setError('');
-        if (history.length > 0) {
-            const prevStep = history[history.length - 1];
+        if (history.length > 1) {
+            const prevStep = history[history.length - 2];
             setHistory(prev => prev.slice(0, -1));
             setCurrentStep(prevStep);
+        } else {
+            navigate(-1);
         }
-    }
+    };
 
     useEffect(() => {
         if (lastQuestionId && currentQuestion.id !== lastQuestionId &&
@@ -297,7 +312,8 @@ export default function RegisterPage() {
 
     const handleSubmit = () => {
         const name = answers['q1'];
-        if (name && !location.state?.currentName) {
+        if (name) {
+            localStorage.setItem(name, JSON.stringify(answers));
             let names = JSON.parse(localStorage.getItem('userNames')) || [];
             if (!names.includes(name)) {
                 names.push(name);
@@ -308,13 +324,12 @@ export default function RegisterPage() {
                 }));
             }
         }
-
         navigate('/app/home');
     }
 
     return (
-        <div className='flex flex-col h-150 justify-between w-full'>
-            <div className='flex flex-col items-center justify-between gap-15 px-2 '>
+        <div className='flex flex-col min-h-full w-full gap-30'>
+            <div className='flex flex-col items-center gap-15 px-2'>
                 {currentQuestion.id !== 'q9' && (
                     <p className='montserrat-extra-bold text-center text-2xl text-[#343330]'>{currentQuestion.text}</p>
                 )}
@@ -334,17 +349,40 @@ export default function RegisterPage() {
                 )}
 
                 {currentQuestion.id === 'q7' && (
-                    <>
+                    <div className="flex flex-col items-center gap-4 w-full px-5">
                         <button
-                            className='relative text-center montserrat-semi-bold text-xl bg-[#CBCACA] rounded-2xl py-3 w-60'
-                            onClick={handleShowDropdown}>
+                            className="relative text-center montserrat-semi-bold text-xl bg-[#CBCACA] rounded-2xl py-3 w-full"
+                            onClick={handleShowDropdown}
+                        >
                             {answers.q7?.location
                                 ? `${answers.q7.location.country}, ${answers.q7.location.city || 'город'}`
                                 : 'Страна, город'}
                         </button>
-                        <DateTimePicker value={answers.q7?.date} onChange={handleSelectDateTime}/>
-                        {showDropdown && (<Dropdown options={countries} handleSelectLocation={handleSelectLocation}/>)}
-                    </>
+                        {showDropdown && <Dropdown options={countries} handleSelectLocation={handleSelectLocation}/>}
+
+                        <button
+                            className="relative text-center montserrat-semi-bold text-xl bg-[#CBCACA] rounded-2xl py-3 w-full"
+                            onClick={handleShowDatePicker}
+                        >
+                            {answers.q7?.date
+                                ? new Date(answers.q7.date).toLocaleString('ru-RU', {
+                                    day: '2-digit',
+                                    month: '2-digit',
+                                    year: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                })
+                                : 'Дата и время'}
+                        </button>
+                        {showDatePicker && (
+                            <DateTimePicker
+                                value={answers.q7?.date}
+                                onChange={handleSelectDateTime}
+                                isOpen={showDatePicker}
+                                onClose={() => setShowDatePicker(false)}
+                            />
+                        )}
+                    </div>
                 )}
 
                 {currentQuestion.id === 'q8' && (
@@ -460,8 +498,14 @@ export default function RegisterPage() {
                                 className='text-[#343330] montserrat-semi-bold text-[16px] flex-1'>{currentQuestion.option2}</div>
                         </div>
                         <div className='flex gap-5 pb-7 justify-between'>
-                            <img src={currentQuestion.image1} alt={currentQuestion.option1}/>
-                            <img src={currentQuestion.image2} alt={currentQuestion.option1}/>
+                            <div className={'flex-1'}>
+                                <img className={'h-50 w-full'} src={currentQuestion.image1}
+                                     alt={currentQuestion.option1}/>
+                            </div>
+                            <div className={'flex-1'}>
+                                <img className={'h-50 w-full'} src={currentQuestion.image2}
+                                     alt={currentQuestion.option1}/>
+                            </div>
                         </div>
                         <Scale changeAnswer={handleChange} currentQuestionId={currentQuestion.id}
                                value={answers[currentQuestion.id] || '0'}/>
@@ -469,16 +513,16 @@ export default function RegisterPage() {
                 )}
 
                 {currentQuestion.id === 'q9' && (
-                    <div className={'flex flex-col items-center justify-center'}>
-                        <img className={'w-70'} src={beAboLogo} alt={'beAbo Logo'}/>
+                    <div className={'flex flex-col items-center justify-center w-full'}>
+                        <img className={'max-w-70 w-full'} src={beAboLogo} alt={'beAbo Logo'}/>
                         <p className={'text-center my-10 montserrat text-xl'}>{currentQuestion.description}</p>
-                        <div className={'flex flex-col pb-2'}>
+                        <div className={'flex flex-col pb-2 w-full'}>
                             <label className={'px-2 montserrat-semi-bold text-[16px] text-[#343330]'}
                                    htmlFor={'email'}>Email</label>
                             <input
                                 type={'email'}
                                 value={answers[currentQuestion.id] || ''}
-                                className={'p-3 rounded-2xl montserrat text-xl bg-[#CBCACA] w-80'}
+                                className={'p-3 rounded-2xl montserrat text-xl bg-[#CBCACA] max-w-80 w-full'}
                                 id={'email'}
                                 onChange={(e) => handleChange('q9', e.target.value)}
                             />
@@ -492,7 +536,7 @@ export default function RegisterPage() {
                 )}
             </div>
 
-            <div className='mx-auto'>
+            <div className='mx-auto mb-auto'>
                 <Button
                     className={'px-9'}
                     text={currentStep === questions.length - 1 ? 'Отправить' : 'Далее'}

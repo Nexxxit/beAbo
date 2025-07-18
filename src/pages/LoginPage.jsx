@@ -17,7 +17,7 @@ export default function LoginPage() {
     const navigate = useNavigate()
 
     return (
-        <div className={'flex flex-col h-150 justify-between items-center gap-16'}>
+        <div className={'flex flex-col h-150 justify-between items-center gap-16 w-full'}>
             <img src={beAboLogo} alt={'beAbo Logo'} />
             <div className={'flex flex-col gap-20'}>
                 <div className={'flex flex-col'}>

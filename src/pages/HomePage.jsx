@@ -24,14 +24,6 @@ export default function HomePage() {
     const [currentSection, setCurrentSection] = useState('main')
     const navigate = useNavigate();
 
-    // useEffect(() => {
-    //     setSurveyState({
-    //         showHeader: true,
-    //         showName: true,
-    //         userName: surveyState.userName,
-    //     })
-    // }, [])
-
     useEffect(() => {
         const storedUserName = JSON.parse(localStorage.getItem('userNames')) || '';
         setSurveyState(prev => ({
@@ -163,12 +155,14 @@ export default function HomePage() {
                     <ul className={'flex flex-col items-center gap-6'}>
                         <li className={'w-50'}>
                             <button
+                                onClick={() => navigate('/app/myTravels')}
                                 className={'py-1 px-5 bg-[#F4F4F4] rounded-xl text-center montserrat-semi-bold text-[15px] w-full'}>
                                 Мои путешествия
                             </button>
                         </li>
                         <li className={'w-50'}>
                             <button
+                                onClick={() => navigate('/app/chooseTravelProfile', {state: {section: 'linkedProfiles'}})}
                                 className={'py-1 px-5 bg-[#F4F4F4] rounded-xl text-center montserrat-semi-bold text-[15px] w-full'}>
                                 Настройки профилей
                             </button>
@@ -184,12 +178,14 @@ export default function HomePage() {
                         </li>
                         <li className={'w-50'}>
                             <button
+                                onClick={() => navigate('/app/priceList')}
                                 className={'py-1 px-5 bg-[#F4F4F4] rounded-xl text-center montserrat-semi-bold text-[15px] w-full'}>
                                 Тарифы
                             </button>
                         </li>
                         <li className={'mt-5 w-50'}>
                             <button
+                                onClick={() => navigate('/')}
                                 className={'py-1 px-5 bg-[#FF0000] rounded-xl text-center montserrat-semi-bold text-white w-full text-[15px]'}>
                                 Выйти
                             </button>
@@ -232,7 +228,7 @@ export default function HomePage() {
                         <div className={'flex-grow'}>
                             <div className={'flex flex-col items-center gap-6 w-full max-w-md mx-auto'}>
                                 <button
-                                    onClick={() => navigate('/app/createTravel')}
+                                    onClick={() => navigate('/app/chooseTravelProfile')}
                                     className={'relative items-center justify-end bg-[#E1E1E1] rounded-2xl flex flex-col p-3 w-52 h-53 shadow-md/30 text-center montserrat-bold text-[#343330] text-[15px]'}>
                                     <img className={'absolute w-32 h-40 -top-1'} src={createNewTravelIcon}
                                          alt={'Создать новое путешествие'}/>
